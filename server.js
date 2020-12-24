@@ -45,14 +45,13 @@ readFile(configFilePath)
               });
 
           console.log(`${chalk.green(req.method)} [${req.originalUrl}] -> [${normalizedPath}]`);
-          readFile(path.resolve(configFileDir, normalizedPath))
-              .then((content) => {
-                resp.send(content);
-              },
-              (error) => {
-                console.error(`${chalk.red('ERROR')} ${error.message}`);
-                console.error(error.stack);
-              });
+          resp.sendFile(path.resolve(configFileDir, normalizedPath), (error) => {
+            if (!error) {
+              return;
+            }
+            console.error(`${chalk.red('ERROR')} ${error}`);
+            console.error(error);
+          });
         });
       }
 
